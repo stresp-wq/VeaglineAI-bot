@@ -5,14 +5,17 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 import google.generativeai as genai
 
-# --- 1. НАСТРОЙКА ---
-TELEGRAM_TOKEN = "8852265249:AAHj__vj7QVvotqj9kmZr7qmRUJ3jycmuJA"
-GEMINI_API_KEY = "AQ.Ab8RN6LQNNO3kbD9PWT0yUxeg3PEMKmpUsPI1aKFw1jnTToUag"
+# --- 1. НАСТРОЙКА (читать из окружения) ---
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 BOT_NAME = "Veagline AI"
+
+# Проверка, что переменные заданы
+if not TELEGRAM_TOKEN or not GEMINI_API_KEY:
+    raise ValueError("Ошибка: переменные TELEGRAM_TOKEN и GEMINI_API_KEY должны быть заданы в окружении!")
 
 # Настройка Gemini
 genai.configure(api_key=GEMINI_API_KEY)
-# Используем gemini-3.1-flash-lite — лёгкая и быстрая модель
 model = genai.GenerativeModel('gemini-3.1-flash-lite')
 
 # Настройка логирования
